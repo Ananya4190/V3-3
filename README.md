@@ -9,18 +9,6 @@ from scipy.sparse import kron
 
 # Function to create nucleus
 def nucleus(Nx, Ny, seed):
-    """
-    Initialize a circular nucleus in the grid.
-
-    Parameters:
-        Nx (int): Number of grid points along the x-axis.
-        Ny (int): Number of grid points along the y-axis.
-        seed (float): Radius of the circular nucleus.
-
-    Returns:
-        phi (ndarray): Array representing the phase field with the nucleus.
-        tempr (ndarray): Array representing the temperature field (initialized to zero).
-    """
     phi = np.zeros((Nx, Ny))
     tempr = np.zeros((Nx, Ny))
     for i in range(Nx):
@@ -31,18 +19,6 @@ def nucleus(Nx, Ny, seed):
 
 # Function to create flat nucleus
 def flatnucleus(Nx, Ny, seed):
-    """
-    Initialize a flat nucleus (horizontal line) in the grid.
-
-    Parameters:
-        Nx (int): Number of grid points along the x-axis.
-        Ny (int): Number of grid points along the y-axis.
-        seed (float): Number of grid points the nucleus will cover along the y-axis.
-
-    Returns:
-        phi (ndarray): Array representing the phase field with the flat nucleus.
-        tempr (ndarray): Array representing the temperature field (initialized to zero).
-    """
     phi = np.zeros((Nx, Ny))
     tempr = np.zeros((Nx, Ny))
     for i in range(Nx):
@@ -53,22 +29,6 @@ def flatnucleus(Nx, Ny, seed):
 
 # Function to create sine nucleus
 def sinenucleus(Nx, Ny, seed, a, lamda, theta0, const):
-    """
-    Initialize a sine wave nucleus in the grid.
-
-    Parameters:
-        Nx (int): Number of grid points along the x-axis.
-        Ny (int): Number of grid points along the y-axis.
-        seed (float): Not used in this function but kept for consistency with other nucleus functions.
-        a (float): Amplitude of the sine wave.
-        lamda (float): Wavelength of the sine wave.
-        theta0 (float): Phase shift of the sine wave.
-        const (float): Vertical shift of the sine wave.
-
-    Returns:
-        phi (ndarray): Array representing the phase field with the sine wave nucleus.
-        tempr (ndarray): Array representing the temperature field (initialized to zero).
-    """
     phi = np.zeros((Nx, Ny))
     tempr = np.zeros((Nx, Ny))
     
@@ -88,18 +48,6 @@ def sinenucleus(Nx, Ny, seed, a, lamda, theta0, const):
 
 # Function to compute laplacian
 def laplacian(nx, ny, dx, dy):
-    """
-    Compute the laplacian matrix for a 2D grid with periodic boundary conditions.
-
-    Parameters:
-        nx (int): Number of grid points along the x-axis.
-        ny (int): Number of grid points along the y-axis.
-        dx (float): Grid spacing along the x-axis.
-        dy (float): Grid spacing along the y-axis.
-
-    Returns:
-        grad (csr_matrix): Sparse matrix representing the laplacian operator.
-    """
     r = np.zeros(nx)
     r[0:2] = [2, -1]
     T = toeplitz(r)
@@ -120,20 +68,6 @@ def laplacian(nx, ny, dx, dy):
 
 # Function to compute gradient
 def gradient_mat(matx, Nx, Ny, dx, dy):
-    """
-    Compute the gradient of a 2D matrix with periodic boundary conditions.
-
-    Parameters:
-        matx (ndarray): Input matrix to compute gradients.
-        Nx (int): Number of grid points along the x-axis.
-        Ny (int): Number of grid points along the y-axis.
-        dx (float): Grid spacing along the x-axis.
-        dy (float): Grid spacing along the y-axis.
-
-    Returns:
-        matdx (ndarray): Gradient along the x-axis.
-        matdy (ndarray): Gradient along the y-axis.
-    """
     matdx, matdy = np.gradient(matx)
 
     # For periodic boundaries
@@ -149,52 +83,11 @@ def gradient_mat(matx, Nx, Ny, dx, dy):
 
 # Function to convert vector to matrix
 def vec2matx(V, N):
-    """
-    Convert a vector to a matrix.
-
-    Parameters:
-        V (ndarray): Input vector to be reshaped.
-        N (int): Number of columns in the resulting matrix.
-
-    Returns:
-        R (ndarray): Reshaped matrix.
-    """
     R = int(np.ceil(len(V) / N))
     return np.reshape(V, (R, N))
 
 # Function to update the animation
 def update(frame, phi, tempr, Nx, Ny, dx, dy, dtime, a, lamda, const, tau, epsilonb, delta, aniso, theta0, alpha, gamma, teq, kappa, laplacian_matrix, img, constepsder):
-    """
-    Update function for the animation.
-
-    Parameters:
-        frame (int): Current frame index.
-        phi (ndarray): Current phase field array.
-        tempr (ndarray): Current temperature field array.
-        Nx (int): Number of grid points along the x-axis.
-        Ny (int): Number of grid points along the y-axis.
-        dx (float): Grid spacing along the x-axis.
-        dy (float): Grid spacing along the y-axis.
-        dtime (float): Time step size.
-        a (float): Amplitude of the sine wave (unused in update).
-        lamda (float): Wavelength of the sine wave (unused in update).
-        const (float): Constant term for sine wave (unused in update).
-        tau (float): Relaxation time.
-        epsilonb (float): Base value of epsilon.
-        delta (float): Amplitude of epsilon modulation.
-        aniso (float): Anisotropy strength.
-        theta0 (float): Initial orientation angle.
-        alpha (float): Coefficient for temperature effect on phase field.
-        gamma (float): Coupling strength between phase field and temperature.
-        teq (float): Equilibrium temperature.
-        kappa (float): Diffusion coefficient for temperature.
-        laplacian_matrix (csr_matrix): Sparse matrix representing the laplacian operator.
-        img (AxesImage): Image object to update in the animation.
-        constepsder (float): Constant for epsilon derivative calculation.
-
-    Returns:
-        img (AxesImage): Updated image object for the animation.
-    """
     phi_old = phi.copy()
 
     # Calculate the laplacians and epsilon
@@ -239,18 +132,6 @@ def update(frame, phi, tempr, Nx, Ny, dx, dy, dtime, a, lamda, const, tau, epsil
 
 # Main function to simulate dendritic growth and create animation
 def dendritic_growth():
-    """
-    Simulate dendritic growth and create an animation.
-
-    Sets up the grid, initializes the nucleus, and evolves the system using a phase-field model.
-    An animation of the phase evolution is created and saved as an MP4 file.
-
-    Parameters:
-        None
-
-    Returns:
-        None
-    """
     # Simulation parameters
     Nx = 300
     Ny = 300
